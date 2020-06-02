@@ -113,12 +113,13 @@ public:
 template <class T> bool operator == (const GCInfo<T> &ob1, const GCInfo<T> &ob2) {
     return (ob1.memoryP == ob2.memoryP);
 }
-template <class T, int size=0> class GCPointer{
+template <class T, int size=0> class GCPointer{// Esta Clase debe ser cambiada por VSPointer
     static list<GCInfo<T> > gclist;
     T *addr;
     bool isArray;
     unsigned TArray;
     static bool prim;
+    typename list<GCInfo<T> >::iterator findPtrInfo(T *ptr);
 public:
     typedef Iterar<T> GCiterator;
     GCPointer(T *t=NULL){
@@ -147,4 +148,114 @@ public:
                 cout << endl;
         #endif
     }
+    GCPointer(const GCPointer &ob) {
+        list<GCInfo<T> >::iterator p;
+        p = findPtrInfo(ob.addr);
+        p->refcount++;
+        addr = ob.addr;
+        TArray = ob.arraySize;
+        if(TArray > 0) 
+            isArray = true;
+        else 
+            isArray = false;
+        #ifdef DISPLAY
+            cout << "Constructing copy.";
+            if(isArray)
+                cout << " Size is " << arraySize << endl;
+            else
+                cout << endl;
+        #endif
+    }
+    ~GCPointer();
+    static bool collect();
+    T *operator=(T *t);
+    GCPointer &operator=(GCPointerr &rv);
+    T &operator*() {
+        return *addr;
+    }
+    T *operator->() {
+         return addr; 
+    }
+    T &operator[](int i) {
+        return addr[i];
+    }
+    operator T *() {
+        return addr; 
+    }
+    Iterar<T> begin() {
+        int size;
+        if(isArray) 
+            size = TArray;
+        else 
+            size = 1;
+        return Iterar<T>(addr, addr, addr + size);
+    }
+    Iterar<T> end() {
+        int size;
+        if(isArray) 
+            size = TArray;
+        else 
+            size = 1;
+        return Iterar<T>(addr + size, addr, addr + size);
+    }
+    static int gclistSize() {
+        return gclist.size(); 
+    }
+    static void showlist();
+    static void shutdown();
+};
+template <class T, int size>
+    list<GCInfo<T> > GCPointer<T, size>::gclist;
+
+template <class T, int size>
+    bool GCPointer<T, size>::first = true;
+
+template <class T, int size>
+GCPointer<T, size>::~GCPointer() {
+    list<GCInfo<T> >::iterator p;
+    p = findPtrInfo(addr);
+    if(p->refcount) 
+        p->refcount--;
+    #ifdef DISPLAY
+        cout << "GCPtr going out of scope.\n";
+    #endif
 }
+template <class T, int size>
+bool GCPtr<T, size>::collect() {
+    bool memfreed = false;
+    #ifdef DISPLAY
+        cout << "Before garbage collection for ";
+        showlist();
+    #endif
+    list<GCInfo<T> >::iterator p;
+    do {
+        for(p = gclist.begin(); p != gclist.end(); p++) {
+            if(p->refcount > 0) continue;
+            memfreed = true;
+            gclist.remove(*p);
+            if(p->memoryP) {
+                if(p->isArray) {
+                    #ifdef DISPLAY
+                        cout << "Deleting array of size "
+                            << p->arraySize << endl;
+                    #endif
+                    delete[] p->memoryP;
+                }
+                else {
+                    #ifdef DISPLAY
+                        cout << "Deleting: "
+                        << *(T *) p->memPtr << "\n";
+                    #endif
+                    delete p->memoryP;
+                }
+            }
+            break;
+        }
+    } while(p != gclist.end());
+    #ifdef DISPLAY
+        cout << "After garbage collection for ";
+        showlist();
+    #endif
+    return memfreed;
+}
+
