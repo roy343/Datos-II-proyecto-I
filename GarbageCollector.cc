@@ -258,4 +258,78 @@ bool GCPtr<T, size>::collect() {
     #endif
     return memfreed;
 }
+template <class T, int size>
+T * GCPtr<T, size>::operator=(T *t) {
+    list<GCInfo<T> >::iterator p;
+    p = findPtrInfo(addr);
+    p->refcount--;
+    p = findPtrInfo(t);
+    if(p != gclist.end())
+        p->refcount++;
+    else {
+        GCInfo<T> gcObj(t, size);
+        gclist.push_front(gcObj);
+    }
+    addr = t;
+    return t;
+}
+template <class T, int size>
+GCPointer<T, size> & GCPtr<T, size>::operator=(GCPtr &rv) {
+    list<GCInfo<T> >::iterator p;
+    p = findPtrInfo(addr);
+    p->refcount--;
+    p = findPtrInfo(rv.addr);
+    p->refcount++;
+    addr = rv.addr;
+    return rv;
+}
+template <class T, int size>
+void GCPointer<T, size>::showlist() {
+    list<GCInfo<T> >::iterator p;
+    cout << "gclist<" << typeid(T).name() << ", "
+        << size << ">:\n";
+    cout << "memoryP    refcount    value\n";  
+    if(gclist.begin() == gclist.end()) {
+        cout << "      -- Empty --\n\n";
+        return;
+}
+for(p = gclist.begin(); p != gclist.end(); p++) {
+    cout << "[" << (void *)p->memoryP << "]"    << "    " << p->refcount << "    ";
+    if(p->memoryP) 
+        cout << "    " << *p->memoryP;
+    else 
+        cout << "    ---";
+        cout << endl;
+    }
+    cout << endl;
+}
+template <class T, int size>
+typename list<GCInfo<T> >::iterator
+    GCPointer<T, size>::findPtrInfo(T *ptr) {
+    list<GCInfo<T> >::iterator p;
+    for(p = gclist.begin(); p != gclist.end(); p++)
+        if(p->memoryP == ptr)
+            return p;
+    return p;
+}
+template <class T, int size>
+void GCPointer<T, size>::shutdown() {
+    if(gclistSize() == 0) return;
+    list<GCInfo<T> >::iterator p;
+    for(p = gclist.begin(); p != gclist.end(); p++) {
+        p->refcount = 0;
+    }
+    #ifdef DISPLAY
+        cout << "Before collecting for shutdown() for "
+             << typeid(T).name() << "\n";
+    #endif
+    collect();
+    #ifdef DISPLAY
+        cout << "After collecting for shutdown() for "
+             << typeid(T).name() << "\n";
+    #endif
+}
+
+
+
 
