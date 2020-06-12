@@ -10,11 +10,11 @@ class FRangoExc{
 };
 
 
-template <class T> class Iterar {
-    T *ptr;
+template <class T> class Iterar {// Clase iterador para ciclar por arrays
+    T *ptr;//Punteros del iterador
     T *fin;
     T *inic;
-    unsigned length;
+    unsigned length;//Largo del array
 public:
     Iterar(){
         ptr = fin = inic = NULL;
@@ -26,24 +26,24 @@ public:
         inic = prim;
         length = ult - prim;
     }
-    unsigned size(){
+    unsigned size(){// Retorna el largo
         return length;
     }
-    T &operator*(){
+    T &operator*(){//Retorna el valor apuntado por el puntero del iterador
         if ((ptr >= fin)|| (ptr < inic))
             throw FRangoExc();
         return *ptr;                
     }
-    T *operator->(){
+    T *operator->(){//Retorna la distancia del puntero
         if( (ptr >= fin) || (ptr < inic) )
             throw FRangoExc();
-
+        return ptr
     }
-    Iterar operator++(){
+    Iterar operator++(){//Suma
         ptr++;
         return *this;
     }
-    Iterar operator--(){
+    Iterar operator--(){//Resta
         ptr--;
         return *this;
     }
@@ -53,7 +53,7 @@ public:
         ptr++;
         return Iterar<T>(temp, inic, fin);
     }
-    Iterar operator--(int notused) {
+    Iterar operator--(int notused) {//Retorna la referencia al objeto en el index
         T *temp = ptr;
         ptr--;
         return Iterar<T>(temp, inic, fin);
@@ -63,7 +63,7 @@ public:
             throw FRangoExc();
         return ptr[i];
     }
-    bool operator==(Iterar op2) {
+    bool operator==(Iterar op2) {//Operadores relacionales
         return ptr == op2.ptr;
     }
     bool operator!=(Iterar op2) {
@@ -81,21 +81,21 @@ public:
     bool operator>=(Iterar op2) {
         return ptr >= op2.ptr;
     }
-    Iterar operator-(int n) {
+    Iterar operator-(int n) {//Resta un int a un iterador
         ptr -= n;
         return *this;
     }
-    Iterar operator+(int n) {
+    Iterar operator+(int n) {//Agrega un int a un iterador
         ptr += n;
         return *this;
     }
-    int operator-(Iterar<T> &itr2) {
+    int operator-(Iterar<T> &itr2) {//Numero de elementos entre iteradores
         return ptr - itr2.ptr;
     }
 };
-template <class T> class GCInfo {
+template <class T> class GCInfo {//Se definen los elementos que se definen en el garbage collector
 public:
-    unsigned refcount;
+    unsigned refcount;//CUenta las referencias
     T *memoryP;
     bool isArray;
     unsigned TArray;
@@ -114,7 +114,9 @@ template <class T> bool operator == (const GCInfo<T> &ob1, const GCInfo<T> &ob2)
     return (ob1.memoryP == ob2.memoryP);
 }
 template <class T, int size=0> class GCPointer{// Esta Clase debe ser cambiada por VSPointer
-    static list<GCInfo<T> > gclist;
+//Aqui se implementa el vspointer (Comparar con lo requerido en vspointer para saber que
+// se queda y que se adapta)
+    static list<GCInfo<T> > gclist;//lista del garbage collector
     T *addr;
     bool isArray;
     unsigned TArray;
