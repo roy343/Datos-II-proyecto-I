@@ -27,6 +27,7 @@ public:
     QPushButton *b1;
     QPushButton *b2;
     QListWidget *lista;
+    QPushButton *test;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -46,6 +47,9 @@ public:
         lista = new QListWidget(centralwidget);
         lista->setObjectName(QString::fromUtf8("lista"));
         lista->setGeometry(QRect(110, 10, 341, 481));
+        test = new QPushButton(centralwidget);
+        test->setObjectName(QString::fromUtf8("test"));
+        test->setGeometry(QRect(10, 270, 93, 28));
         Visualizer->setCentralWidget(centralwidget);
         menubar = new QMenuBar(Visualizer);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -65,6 +69,7 @@ public:
         Visualizer->setWindowTitle(QCoreApplication::translate("Visualizer", "Visualizer", nullptr));
         b1->setText(QCoreApplication::translate("Visualizer", "Server", nullptr));
         b2->setText(QCoreApplication::translate("Visualizer", "Local", nullptr));
+        test->setText(QCoreApplication::translate("Visualizer", "Probar ", nullptr));
     } // retranslateUi
 
 };
