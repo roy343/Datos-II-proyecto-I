@@ -117,25 +117,27 @@ template <class T, int size=0> class GCPointer{// Esta Clase debe ser cambiada p
 //Aqui se implementa el vspointer (Comparar con lo requerido en vspointer para saber que
 // se queda y que se adapta)
     static list<GCInfo<T> > gclist;//lista del garbage collector
-    T *addr;
+    T *addr;//Apunta hacia la memoria a la que cgpointer apunte
     bool isArray;
-    unsigned TArray;
+    unsigned TArray;//Atributo size de un array
     static bool prim;
     typename list<GCInfo<T> >::iterator findPtrInfo(T *ptr);
 public:
-    typedef Iterar<T> GCiterator;
-    GCPointer(T *t=NULL){
+    typedef Iterar<T> GCiterator;//Define un iterador para gcpointer
+    GCPointer(T *t=NULL){//Constructor de objetos (no importa si no estan inicializados)
         if(prim)
-            atexit(shutdown);
+            atexit(shutdown);//Registro de funcion de salida
         prim = false;
-        list<GCInfo<T> >::iterator p;
+
+        list<GCInfo<T> >::iterator p;//Dependiendo de la condicion aumenta el conteo de referencias
         p = findPtrInfo(t);
         if(p != gclist.end())
-            p->refcount++;
+            p->refcount++;//Aumento del conteo
         else {
-            GCInfo<T> gcObj(t, size);
+            GCInfo<T> gcObj(t, size);// Si no, crea y almacena la entrada
             gclist.push_front(gcObj);
         }
+
         addr = t;
         TArray = size;
         if(size > 0) 
@@ -150,7 +152,7 @@ public:
                 cout << endl;
         #endif
     }
-    GCPointer(const GCPointer &ob) {
+    GCPointer(const GCPointer &ob) {//Se crea el copy constructor
         list<GCInfo<T> >::iterator p;
         p = findPtrInfo(ob.addr);
         p->refcount++;
@@ -161,30 +163,31 @@ public:
         else 
             isArray = false;
         #ifdef DISPLAY
-            cout << "Constructing copy.";
+            cout << "Construyendo copia.";
             if(isArray)
-                cout << " Size is " << arraySize << endl;
+                cout << " El size es " << arraySize << endl;
             else
                 cout << endl;
         #endif
     }
-    ~GCPointer();
-    static bool collect();
+    ~GCPointer();//Este es el destructor para el cgpointer
+    static bool collect();//Recolecta la basura (Retorna true si un elemento fue liberado)
     T *operator=(T *t);
-    GCPointer &operator=(GCPointerr &rv);
+
+    GCPointer &operator=(GCPointer &rv);//Retorna la referencia del objeto apuntado
     T &operator*() {
         return *addr;
     }
-    T *operator->() {
+    T *operator->() {//Retorna la direccion apuntada
          return addr; 
     }
-    T &operator[](int i) {
+    T &operator[](int i) {//Retorna una referencia al objeto que el indice apunta (i)
         return addr[i];
     }
-    operator T *() {
+    operator T *() {//Funcion conversora a T*
         return addr; 
     }
-    Iterar<T> begin() {
+    Iterar<T> begin() {//Retorna un iterador al inicio de la memoria colocada
         int size;
         if(isArray) 
             size = TArray;
@@ -192,7 +195,8 @@ public:
             size = 1;
         return Iterar<T>(addr, addr, addr + size);
     }
-    Iterar<T> end() {
+
+    Iterar<T> end() {//Retorna un iterador a uno mas que el final de un array colocado
         int size;
         if(isArray) 
             size = TArray;
@@ -200,68 +204,76 @@ public:
             size = 1;
         return Iterar<T>(addr + size, addr, addr + size);
     }
-    static int gclistSize() {
+
+    static int gclistSize() {//Retorna el size de un gclist para este tipo de puntero
         return gclist.size(); 
     }
-    static void showlist();
-    static void shutdown();
+    static void showlist();//Muestra la gclist
+    static void shutdown();//Limpia la gclist
 };
-template <class T, int size>
+template <class T, int size>//Crea espacio para variables estaticas
     list<GCInfo<T> > GCPointer<T, size>::gclist;
 
 template <class T, int size>
     bool GCPointer<T, size>::first = true;
 
-template <class T, int size>
+template <class T, int size>//Destructor para Gcpointer
 GCPointer<T, size>::~GCPointer() {
     list<GCInfo<T> >::iterator p;
     p = findPtrInfo(addr);
     if(p->refcount) 
         p->refcount--;
     #ifdef DISPLAY
-        cout << "GCPtr going out of scope.\n";
+        cout << "GCPointer se salio del alcance.\n";
     #endif
+    collect();//REcolecta la basura cuando un puntero se sale de alcance
 }
-template <class T, int size>
-bool GCPtr<T, size>::collect() {
+
+template <class T, int size>//Recolecta la basura
+bool GCPointer<T, size>::collect() {
     bool memfreed = false;
     #ifdef DISPLAY
-        cout << "Before garbage collection for ";
+        cout << "Antes del garbage collection para ";
         showlist();
     #endif
     list<GCInfo<T> >::iterator p;
-    do {
+
+    do {//Escanea gclist en busca de punteros sin referenciar
         for(p = gclist.begin(); p != gclist.end(); p++) {
             if(p->refcount > 0) continue;
             memfreed = true;
-            gclist.remove(*p);
-            if(p->memoryP) {
+            gclist.remove(*p);//Remueve entradas usadas del gclist
+            if(p->memoryP) {//Libera la memoria a no ser que gcpointer sea null
                 if(p->isArray) {
                     #ifdef DISPLAY
-                        cout << "Deleting array of size "
-                            << p->arraySize << endl;
+                        cout << "Borrando array de size "
+                            << p->TArray << endl;
                     #endif
-                    delete[] p->memoryP;
+                    delete[] p->memoryP;//Borra el array
                 }
                 else {
+
                     #ifdef DISPLAY
-                        cout << "Deleting: "
-                        << *(T *) p->memPtr << "\n";
+                        cout << "Borrando: "
+                        << *(T *) p->memoryP << "\n";
                     #endif
-                    delete p->memoryP;
+                    delete p->memoryP;//Borra un elemento
                 }
             }
-            break;
+
+            break;//Break para reiniciar la busqueda
         }
+
     } while(p != gclist.end());
     #ifdef DISPLAY
-        cout << "After garbage collection for ";
+        cout << "Despues del garbage collection para ";
         showlist();
     #endif
     return memfreed;
 }
-template <class T, int size>
-T * GCPtr<T, size>::operator=(T *t) {
+
+template <class T, int size>//Asignacion de overload de puntero a gcpointer
+T * GCPointer<T, size>::operator=(T *t) {
     list<GCInfo<T> >::iterator p;
     p = findPtrInfo(addr);
     p->refcount--;
@@ -272,11 +284,13 @@ T * GCPtr<T, size>::operator=(T *t) {
         GCInfo<T> gcObj(t, size);
         gclist.push_front(gcObj);
     }
-    addr = t;
+
+    addr = t;//Guarda la direccion
     return t;
 }
-template <class T, int size>
-GCPointer<T, size> & GCPtr<T, size>::operator=(GCPtr &rv) {
+
+template <class T, int size>//Asignacion de overload de gcpointer a gcpointer
+GCPointer<T, size> & GCPointer<T, size>::operator=(GCPointer &rv) {
     list<GCInfo<T> >::iterator p;
     p = findPtrInfo(addr);
     p->refcount--;
@@ -285,7 +299,8 @@ GCPointer<T, size> & GCPtr<T, size>::operator=(GCPtr &rv) {
     addr = rv.addr;
     return rv;
 }
-template <class T, int size>
+
+template <class T, int size>//Muestra gclist
 void GCPointer<T, size>::showlist() {
     list<GCInfo<T> >::iterator p;
     cout << "gclist<" << typeid(T).name() << ", "
@@ -305,7 +320,8 @@ for(p = gclist.begin(); p != gclist.end(); p++) {
     }
     cout << endl;
 }
-template <class T, int size>
+
+template <class T, int size>//Encuentra un puntero en gclist
 typename list<GCInfo<T> >::iterator
     GCPointer<T, size>::findPtrInfo(T *ptr) {
     list<GCInfo<T> >::iterator p;
@@ -314,7 +330,7 @@ typename list<GCInfo<T> >::iterator
             return p;
     return p;
 }
-template <class T, int size>
+template <class T, int size>//Limpia la lista cuando el programa sale
 void GCPointer<T, size>::shutdown() {
     if(gclistSize() == 0) return;
     list<GCInfo<T> >::iterator p;
@@ -322,12 +338,12 @@ void GCPointer<T, size>::shutdown() {
         p->refcount = 0;
     }
     #ifdef DISPLAY
-        cout << "Before collecting for shutdown() for "
+        cout << "Antes de recolectar para shutdown() para "
              << typeid(T).name() << "\n";
     #endif
     collect();
     #ifdef DISPLAY
-        cout << "After collecting for shutdown() for "
+        cout << "Despues de recolectar para shutdown() para "
              << typeid(T).name() << "\n";
     #endif
 }
