@@ -2,6 +2,7 @@
 #include <list>
 #include <typeinfo>
 #include <cstdlib>
+//#define DISPLAY
 
 using namespace std;
 
@@ -37,7 +38,7 @@ public:
     T *operator->(){//Retorna la distancia del puntero
         if( (ptr >= fin) || (ptr < inic) )
             throw FRangoExc();
-        return ptr
+        return ptr;
     }
     Iterar operator++(){//Suma
         ptr++;
@@ -101,7 +102,6 @@ public:
     unsigned TArray;
     GCInfo(T *mPt, unsigned size = 0) {
         refcount = 1;
-        refcount = 1;
         memoryP = mPt;
         if(size != 0)
             isArray = true;
@@ -111,10 +111,10 @@ public:
     }
 };
 
-template <class T> bool operator == (const GCInfo<T> &ob1, const GCInfo<T> &ob2) {
+template <class T> bool operator==(const GCInfo<T> &ob1, const GCInfo<T> &ob2) {
     return (ob1.memoryP == ob2.memoryP);
 }
-template <class T, int size = 0> class GCPointer{// Esta Clase debe ser cambiada por VSPointer
+template <class T, int size = 0 > class GCPointer{// Esta Clase debe ser cambiada por VSPointer
 //Aqui se implementa el vspointer (Comparar con lo requerido en vspointer para saber que
 // se queda y que se adapta)
     static list<GCInfo<T> > gclist;//lista del garbage collector

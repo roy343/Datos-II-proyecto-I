@@ -7,6 +7,7 @@ using namespace std;
 int main() {
 
     GCPointer<int> p;
+    
     try {
         p = new int;
     } catch(bad_alloc exc) {
