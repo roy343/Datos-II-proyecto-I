@@ -101,6 +101,7 @@ public:
     unsigned TArray;
     GCInfo(T *mPt, unsigned size = 0) {
         refcount = 1;
+        refcount = 1;
         memoryP = mPt;
         if(size != 0)
             isArray = true;
@@ -113,7 +114,7 @@ public:
 template <class T> bool operator == (const GCInfo<T> &ob1, const GCInfo<T> &ob2) {
     return (ob1.memoryP == ob2.memoryP);
 }
-template <class T, int size=0> class GCPointer{// Esta Clase debe ser cambiada por VSPointer
+template <class T, int size = 0> class GCPointer{// Esta Clase debe ser cambiada por VSPointer
 //Aqui se implementa el vspointer (Comparar con lo requerido en vspointer para saber que
 // se queda y que se adapta)
     static list<GCInfo<T> > gclist;//lista del garbage collector
@@ -124,7 +125,7 @@ template <class T, int size=0> class GCPointer{// Esta Clase debe ser cambiada p
     typename list<GCInfo<T> >::iterator findPtrInfo(T *ptr);
 public:
     typedef Iterar<T> GCiterator;//Define un iterador para gcpointer
-    GCPointer(T *t=NULL){//Constructor de objetos (no importa si no estan inicializados)
+    GCPointer(T *t = NULL){//Constructor de objetos (no importa si no estan inicializados)
         if(prim)
             atexit(shutdown);//Registro de funcion de salida
         prim = false;
@@ -145,9 +146,9 @@ public:
         else 
             isArray = false;
         #ifdef DISPLAY
-            cout << "Constructing GCPtr. ";
+            cout << "Construyendo GCPointer. ";
             if(isArray)
-                cout << " Size is " << arraySize << endl;
+                cout << " Size es " << arraySize << endl;
             else
                 cout << endl;
         #endif
@@ -157,7 +158,7 @@ public:
         p = findPtrInfo(ob.addr);
         p->refcount++;
         addr = ob.addr;
-        TArray = ob.arraySize;
+        TArray = ob.TArray;
         if(TArray > 0) 
             isArray = true;
         else 
@@ -165,7 +166,7 @@ public:
         #ifdef DISPLAY
             cout << "Construyendo copia.";
             if(isArray)
-                cout << " El size es " << arraySize << endl;
+                cout << " El size es " << TArray << endl;
             else
                 cout << endl;
         #endif
