@@ -18,7 +18,7 @@ template <class T> class Iterar {// Clase iterador para ciclar por arrays
 public:
     Iterar(){
         ptr = fin = inic = NULL;
-        lenght = 0;
+        length = 0;
     }
     Iterar(T *p, T *prim, T *ult){
         ptr = p;
@@ -148,7 +148,7 @@ public:
         #ifdef DISPLAY
             cout << "Construyendo GCPointer. ";
             if(isArray)
-                cout << " Size es " << arraySize << endl;
+                cout << " Size es " << TArray << endl;
             else
                 cout << endl;
         #endif
