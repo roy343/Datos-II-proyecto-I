@@ -10,24 +10,25 @@ const vscode = require('vscode');
  */
 function activate(context) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "memory-manager" is now active!');
+	//Avisa que la exetension se ejecuto con exito
+	console.log('La extension esta siendo ejecutada');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
+	//
 	let disposable = vscode.commands.registerCommand('memory-manager.helloWorld', function () {
 		const editor = vscode.window.activeTextEditor;
 		
-		vscode.window.showInformationMessage('Hello World from Memory-Manager!');
+		vscode.window.showInformationMessage('Memory Manager a sido ejecutado con exito');
+		editor.edit((edit)=>{
+			//edit.replace(editor.selection,"#include \"vs.h\"")
+			edit.replace(editor.selection,"#include <iostream>")
+		})
 	});
 
 	context.subscriptions.push(disposable);
 }
 exports.activate = activate;
 
-// this method is called when your extension is deactivated
+//Este metodo se invoca cuando la extension se desactiva
 function deactivate() {}
 
 module.exports = {
