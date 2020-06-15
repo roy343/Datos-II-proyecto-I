@@ -31,13 +31,15 @@ public:
         return length;
     }
     T &operator*(){//Retorna el valor apuntado por el puntero del iterador
-        if ((ptr >= fin)|| (ptr < inic))
+        if ((ptr >= fin)|| (ptr < inic)){
             throw FRangoExc();
+        }
         return *ptr;                
     }
     T *operator->(){//Retorna la distancia del puntero
-        if( (ptr >= fin) || (ptr < inic) )
+        if( (ptr >= fin) || (ptr < inic) ){
             throw FRangoExc();
+        }
         return ptr;
     }
     Iterar operator++(){//Suma
@@ -60,8 +62,9 @@ public:
         return Iterar<T>(temp, inic, fin);
     }
     T &operator[](int i) {
-        if( (i < 0) || (i >= (fin-inic)) )
+        if( (i < 0) || (i >= (fin-inic)) ){
             throw FRangoExc();
+        }
         return ptr[i];
     }
     bool operator==(Iterar op2) {//Operadores relacionales
@@ -103,10 +106,12 @@ public:
     GCInfo(T *mPt, unsigned size = 0) {
         refcount = 1;
         memoryP = mPt;
-        if(size != 0)
+        if(size != 0){
             isArray = true;
-        else
+        }
+        else{
             isArray = false;
+        }
         TArray = size;
     }
 };
@@ -126,14 +131,16 @@ template <class T, int size = 0 > class GCPointer{// Esta Clase debe ser cambiad
 public:
     typedef Iterar<T> GCiterator;//Define un iterador para gcpointer
     GCPointer(T *t = NULL){//Constructor de objetos (no importa si no estan inicializados)
-        if(prim)
+        if(prim){
             atexit(shutdown);//Registro de funcion de salida
+        }
         prim = false;
 
         list<GCInfo<T> >::iterator p;//Dependiendo de la condicion aumenta el conteo de referencias
         p = findPtrInfo(t);
-        if(p != gclist.end())
+        if(p != gclist.end()){
             p->refcount++;//Aumento del conteo
+        }
         else {
             GCInfo<T> gcObj(t, size);// Si no, crea y almacena la entrada
             gclist.push_front(gcObj);
@@ -141,10 +148,12 @@ public:
 
         addr = t;
         TArray = size;
-        if(size > 0) 
+        if(size > 0){
             isArray = true;
-        else 
+        }
+        else{
             isArray = false;
+        }
         #ifdef DISPLAY
             cout << "Construyendo GCPointer. ";
             if(isArray)
@@ -159,10 +168,12 @@ public:
         p->refcount++;
         addr = ob.addr;
         TArray = ob.TArray;
-        if(TArray > 0) 
+        if(TArray > 0){
             isArray = true;
-        else 
+        }
+        else{
             isArray = false;
+        }
         #ifdef DISPLAY
             cout << "Construyendo copia.";
             if(isArray)
@@ -190,19 +201,23 @@ public:
     }
     Iterar<T> begin() {//Retorna un iterador al inicio de la memoria colocada
         int size;
-        if(isArray) 
+        if(isArray){
             size = TArray;
-        else 
+        }
+        else{
             size = 1;
+        }
         return Iterar<T>(addr, addr, addr + size);
     }
 
     Iterar<T> end() {//Retorna un iterador a uno mas que el final de un array colocado
         int size;
-        if(isArray) 
+        if(isArray){
             size = TArray;
-        else 
+        }
+        else{
             size = 1;
+        }
         return Iterar<T>(addr + size, addr, addr + size);
     }
 
@@ -222,8 +237,9 @@ template <class T, int size>//Destructor para Gcpointer
 GCPointer<T, size>::~GCPointer() {
     list<GCInfo<T> >::iterator p;
     p = findPtrInfo(addr);
-    if(p->refcount) 
+    if(p->refcount){
         p->refcount--;
+    }
     #ifdef DISPLAY
         cout << "GCPointer se salio del alcance.\n";
     #endif
@@ -279,8 +295,9 @@ T * GCPointer<T, size>::operator=(T *t) {
     p = findPtrInfo(addr);
     p->refcount--;
     p = findPtrInfo(t);
-    if(p != gclist.end())
+    if(p != gclist.end()){
         p->refcount++;
+    }
     else {
         GCInfo<T> gcObj(t, size);
         gclist.push_front(gcObj);
@@ -310,12 +327,14 @@ void GCPointer<T, size>::showlist() {
     if(gclist.begin() == gclist.end()) {
         cout << "      -- Empty --\n\n";
         return;
+    }
 }
 for(p = gclist.begin(); p != gclist.end(); p++) {
     cout << "[" << (void *)p->memoryP << "]"    << "    " << p->refcount << "    ";
-    if(p->memoryP) 
+    if(p->memoryP){
         cout << "    " << *p->memoryP;
-    else 
+    }
+    else{
         cout << "    ---";
         cout << endl;
     }
@@ -330,7 +349,7 @@ typename list<GCInfo<T> >::iterator
         if(p->memoryP == ptr)
             return p;
     return p;
-}
+    }
 template <class T, int size>//Limpia la lista cuando el programa sale
 void GCPointer<T, size>::shutdown() {
     if(gclistSize() == 0) return;
