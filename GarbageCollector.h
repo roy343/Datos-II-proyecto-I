@@ -156,10 +156,12 @@ public:
         }
         #ifdef DISPLAY
             cout << "Construyendo GCPointer. ";
-            if(isArray)
+            if(isArray){
                 cout << " Size es " << TArray << endl;
-            else
+            }
+            else{
                 cout << endl;
+            }
         #endif
     }
     GCPointer(const GCPointer &ob) {//Se crea el copy constructor
@@ -176,10 +178,12 @@ public:
         }
         #ifdef DISPLAY
             cout << "Construyendo copia.";
-            if(isArray)
+            if(isArray){
                 cout << " El size es " << TArray << endl;
-            else
+            }
+            else{
                 cout << endl;
+            }
         #endif
     }
     ~GCPointer();//Este es el destructor para el cgpointer
@@ -346,8 +350,9 @@ typename list<GCInfo<T> >::iterator
     GCPointer<T, size>::findPtrInfo(T *ptr) {
     list<GCInfo<T> >::iterator p;
     for(p = gclist.begin(); p != gclist.end(); p++)
-        if(p->memoryP == ptr)
+        if(p->memoryP == ptr){
             return p;
+        }
     return p;
     }
 template <class T, int size>//Limpia la lista cuando el programa sale
