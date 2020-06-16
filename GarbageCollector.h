@@ -351,10 +351,11 @@ template <class T, int size>//Encuentra un puntero en gclist
 typename list<GCInfo<T> >::iterator
     GCPointer<T, size>::findPtrInfo(T *ptr) {
     list<GCInfo<T> >::iterator p;
-    for(p = gclist.begin(); p != gclist.end(); p++)
+    for(p = gclist.begin(); p != gclist.end(); p++){
         if(p->memoryP == ptr){
             return p;
         }
+    }
     return p;
     }
 template <class T, int size>//Limpia la lista cuando el programa sale
