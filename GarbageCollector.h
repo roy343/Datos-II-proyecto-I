@@ -235,7 +235,7 @@ template <class T, int size>//Crea espacio para variables estaticas
     list<GCInfo<T> > GCPointer<T, size>::gclist;
 
 template <class T, int size>
-    bool GCPointer<T, size>::first = true;
+    bool GCPointer<T, size>::prim = true;
 
 template <class T, int size>//Destructor para Gcpointer
 GCPointer<T, size>::~GCPointer() {
@@ -247,7 +247,7 @@ GCPointer<T, size>::~GCPointer() {
     #ifdef DISPLAY
         cout << "GCPointer se salio del alcance.\n";
     #endif
-    collect();//REcolecta la basura cuando un puntero se sale de alcance
+    collect();//Recolecta la basura cuando un puntero se sale de alcance
 }
 
 template <class T, int size>//Recolecta la basura
@@ -261,7 +261,9 @@ bool GCPointer<T, size>::collect() {
 
     do {//Escanea gclist en busca de punteros sin referenciar
         for(p = gclist.begin(); p != gclist.end(); p++) {
-            if(p->refcount > 0) continue;
+            if(p->refcount > 0){
+                continue;
+            }
             memfreed = true;
             gclist.remove(*p);//Remueve entradas usadas del gclist
             if(p->memoryP) {//Libera la memoria a no ser que gcpointer sea null
@@ -332,15 +334,15 @@ void GCPointer<T, size>::showlist() {
         cout << "      -- Empty --\n\n";
         return;
     }
-}
-for(p = gclist.begin(); p != gclist.end(); p++) {
-    cout << "[" << (void *)p->memoryP << "]"    << "    " << p->refcount << "    ";
-    if(p->memoryP){
+    for(p = gclist.begin(); p != gclist.end(); p++) {
+        cout << "[" << (void *)p->memoryP << "]"    << "    " << p->refcount << "    ";
+        if(p->memoryP){
         cout << "    " << *p->memoryP;
-    }
-    else{
-        cout << "    ---";
-        cout << endl;
+        }
+        else{
+            cout << "    ---";
+            cout << endl;
+        }
     }
     cout << endl;
 }
