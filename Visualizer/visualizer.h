@@ -15,6 +15,9 @@ public:
     Visualizer(QWidget *parent = nullptr);
     ~Visualizer();
 
+private slots:
+    void on_b1_clicked();
+
 private:
     Ui::Visualizer *ui;
 };
