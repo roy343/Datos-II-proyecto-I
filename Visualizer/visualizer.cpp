@@ -24,6 +24,7 @@ Visualizer::~Visualizer()
 
 void Visualizer::on_b1_clicked()
 {
+    ui->lista->addItem("hello");
     QString archivo = "C:/Users/Dell/Desktop/prueba.json";
         //Variables necesarias
         QJsonArray arr;
