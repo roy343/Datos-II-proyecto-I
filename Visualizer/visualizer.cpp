@@ -8,12 +8,19 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QMessageBox>
+#include <QTcpSocket>
 
 Visualizer::Visualizer(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Visualizer)
 {
     ui->setupUi(this);
+    mSocket = new QTcpSocket(this);
+
+    connect(mSocket,&QTcpSocket::readyRead, [&](){
+        QTextStream T(mSocket);
+        ui ->lista->addItem(T.readAll());
+    });
 }
 
 Visualizer::~Visualizer()
@@ -24,6 +31,7 @@ Visualizer::~Visualizer()
 
 void Visualizer::on_b1_clicked()
 {
+
     ui->lista->addItem("hello");
     QString archivo = "C:/Users/Dell/Desktop/prueba.json";
         //Variables necesarias

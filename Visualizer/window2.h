@@ -3,9 +3,12 @@
 
 #include <QDialog>
 
+
 namespace Ui {
 class Window2;
 }
+
+
 
 class Window2 : public QDialog
 {
@@ -14,6 +17,9 @@ class Window2 : public QDialog
 public:
     explicit Window2(QWidget *parent = nullptr);
     ~Window2();
+
+private slots:
+    void on_b21_clicked();
 
 private:
     Ui::Window2 *ui;
