@@ -249,6 +249,7 @@ Makefile: ../Visualizer/Visualizer.pro D:/QT/5.15.0/mingw81_64/mkspecs/win32-g++
 		../Visualizer/Visualizer.pro \
 		D:/QT/5.15.0/mingw81_64/lib/Qt5Widgets.prl \
 		D:/QT/5.15.0/mingw81_64/lib/Qt5Gui.prl \
+		D:/QT/5.15.0/mingw81_64/lib/Qt5Network.prl \
 		D:/QT/5.15.0/mingw81_64/lib/Qt5Core.prl \
 		D:/QT/5.15.0/mingw81_64/lib/qtmain.prl \
 		.qmake.stash \
@@ -433,6 +434,7 @@ D:/QT/5.15.0/mingw81_64/mkspecs/features/lex.prf:
 ../Visualizer/Visualizer.pro:
 D:/QT/5.15.0/mingw81_64/lib/Qt5Widgets.prl:
 D:/QT/5.15.0/mingw81_64/lib/Qt5Gui.prl:
+D:/QT/5.15.0/mingw81_64/lib/Qt5Network.prl:
 D:/QT/5.15.0/mingw81_64/lib/Qt5Core.prl:
 D:/QT/5.15.0/mingw81_64/lib/qtmain.prl:
 .qmake.stash:

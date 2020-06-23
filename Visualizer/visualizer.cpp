@@ -8,19 +8,14 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QMessageBox>
-#include <QTcpSocket>
+#include "window2.cpp"
 
 Visualizer::Visualizer(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Visualizer)
 {
     ui->setupUi(this);
-    mSocket = new QTcpSocket(this);
 
-    connect(mSocket,&QTcpSocket::readyRead, [&](){
-        QTextStream T(mSocket);
-        ui ->lista->addItem(T.readAll());
-    });
 }
 
 Visualizer::~Visualizer()
@@ -31,33 +26,26 @@ Visualizer::~Visualizer()
 
 void Visualizer::on_b1_clicked()
 {
+    QString id = ui->id->text();
+    QString puerto = ui->puerto->text();
+    QString con = ui->con->text();
 
-    ui->lista->addItem("hello");
-    QString archivo = "C:/Users/Dell/Desktop/prueba.json";
-        //Variables necesarias
-        QJsonArray arr;
-        QJsonDocument doc;
-        QJsonObject obj;
-        QByteArray data_json;
-
-        //Abre el docuemento y guarda los datos en las variables
-        QFile input(archivo);
-        input.open(QIODevice::ReadOnly | QIODevice::Text);
-        data_json = input.readAll();
-        doc = doc.fromJson(data_json);
-        obj =doc.object();
-
-        //Muestra los datos del documento
-        QString valor = obj["datos"].toString();
-        QString valor1 = obj["datos1"].toString();
-        ui->lista->addItem(valor);
-        ui->lista->addItem(valor1);
+    if(id == "1234" && con == "1234"){
+        Window2 win2;
+        win2.setModal(true);
+        win2.exec();
+    };
 
 
 
 
 
-    //Window2 win2;
-    //win2.setModal(true);
-    //win2.exec();
+
+//    Window2 win2;
+//    win2.setModal(true);
+//    win2.exec();
 }
+
+
+
+

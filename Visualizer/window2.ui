@@ -6,70 +6,47 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>251</width>
-    <height>161</height>
+    <width>297</width>
+    <height>417</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="b1">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>110</y>
+     <x>30</x>
+     <y>380</y>
      <width>93</width>
      <height>28</height>
     </rect>
    </property>
    <property name="text">
-    <string>Cancelar</string>
+    <string>Actualizar</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QPushButton" name="b2">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>80</y>
-     <width>211</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lineEdit_2">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>30</y>
-     <width>211</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>60</y>
-     <width>71</width>
-     <height>16</height>
+     <x>180</x>
+     <y>380</y>
+     <width>93</width>
+     <height>28</height>
     </rect>
    </property>
    <property name="text">
-    <string>Contraseña</string>
+    <string>Cerrar</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QListWidget" name="lista">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>10</y>
-     <width>55</width>
-     <height>16</height>
+     <width>281</width>
+     <height>361</height>
     </rect>
-   </property>
-   <property name="text">
-    <string>IP</string>
    </property>
   </widget>
  </widget>

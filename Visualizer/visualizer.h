@@ -2,13 +2,13 @@
 #define VISUALIZER_H
 
 #include <QMainWindow>
-#include <QTcpSocket>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Visualizer; }
 QT_END_NAMESPACE
 
-class QTcpSocket;
+
 class Visualizer : public QMainWindow
 {
     Q_OBJECT
@@ -22,6 +22,6 @@ private slots:
 
 private:
     Ui::Visualizer *ui;
-    QTcpSocket *mSocket;
+
 };
 #endif // VISUALIZER_H
