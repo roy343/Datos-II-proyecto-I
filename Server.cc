@@ -7,7 +7,7 @@
 #define PORT 8080 
 
 int main(int argc, char const *argv[]){
-    int server, new_socket, valueR;
+    int server_fd, new_socket, valueR;
     struct sockaddr_in address;
     int opt = 1;
     int lenghtaddr = sizeof(address);
@@ -37,13 +37,13 @@ int main(int argc, char const *argv[]){
         perror("escucha");
         exit(EXIT_FAILURE);
     }
-    if((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0){
+    if((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&lenghtaddr)) < 0){
         perror("acepta");
         exit(EXIT_FAILURE);
     }
     valueR = read(new_socket, buffer, 1024);
     printf("%s\n",buffer);
-    send(new_socket, hello, strlen(hola), 0);
+    send(new_socket, hello, strlen(hello), 0);
     printf("Mensaje de saludo enviado\n");
     return 0;
 }
