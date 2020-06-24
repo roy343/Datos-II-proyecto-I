@@ -49,3 +49,8 @@ void Visualizer::on_b1_clicked()
 
 
 
+
+void Visualizer::on_probar_clicked()
+{
+
+}

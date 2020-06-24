@@ -20,6 +20,8 @@ public:
 private slots:
     void on_b1_clicked();
 
+    void on_probar_clicked();
+
 private:
     Ui::Visualizer *ui;
 
