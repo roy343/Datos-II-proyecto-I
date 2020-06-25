@@ -53,3 +53,8 @@ void Window2::on_b1_clicked()
         ui->lista->addItem(valor);
         ui->lista->addItem(valor1);
 }
+
+void Window2::on_b2_clicked()
+{
+    Window2::close();
+}

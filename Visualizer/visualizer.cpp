@@ -26,6 +26,7 @@ Visualizer::Visualizer(QWidget *parent)
 
     connect(mSocket,&QTcpSocket::readyRead, [&](){
         QTextStream T(mSocket);
+        qInfo()<<T.readAll();
     });
 
 }
@@ -50,7 +51,7 @@ void Visualizer::on_b1_clicked()
 
     /*! Cuando el id y la contrasena son las correctas entonces se ejecuta
         la segunda ventana donde esta el visualizer*/
-    if(id == "1234" && con == "1234"){
+    if(con == "1234"){
         mSocket->connectToHost(ui->id->text(),ui->puerto->value());
 
 
@@ -73,7 +74,13 @@ void Visualizer::on_b1_clicked()
 
 
 
-void Visualizer::on_probar_clicked()
-{
+//void Visualizer::on_probar_clicked()
+//{
+//    qInfo()<<
 
+//}
+
+void Visualizer::on_b2_clicked()
+{
+    Visualizer::close();
 }

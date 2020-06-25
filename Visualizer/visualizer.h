@@ -26,6 +26,8 @@ private slots:
 
     void on_probar_clicked();
 
+    void on_b2_clicked();
+
 private:
     Ui::Visualizer *ui;
     QTcpSocket *mSocket;
