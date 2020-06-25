@@ -1,15 +1,15 @@
 
-#include <unistd.h> 
+#include <unistd.h> //Includes necesarios
 #include <stdio.h> 
 #include <sys/socket.h> 
 #include <stdlib.h> 
 #include <netinet/in.h> 
 #include <string.h> 
-#define PORT 8080 
+#define PORT 8080 //puerto definido
 
 int main(int argc, char const *argv[]) 
 { 
-    int server_fd, new_socket, valread; 
+    int server_fd, new_socket, valread; // Crea nuevo socket
     struct sockaddr_in address; 
     int opt = 1; 
     int addrlen = sizeof(address); 
@@ -30,7 +30,7 @@ int main(int argc, char const *argv[])
         perror("setsockopt"); 
         exit(EXIT_FAILURE); 
     } 
-    address.sin_family = AF_INET; 
+    address.sin_family = AF_INET; // Familia, direccion y puerto
     address.sin_addr.s_addr = INADDR_ANY; 
     address.sin_port = htons( PORT ); 
     if (bind(server_fd, (struct sockaddr *)&address,  
@@ -50,7 +50,7 @@ int main(int argc, char const *argv[])
         perror("accept"); 
         exit(EXIT_FAILURE); 
     } 
-    valread = read( new_socket , buffer, 1024); 
+    valread = read( new_socket , buffer, 1024); // Lee la entrada y retorna un mensaje de conexion exitosa
     printf("%s\n",buffer ); 
     send(new_socket , hello , strlen(hello) , 0 ); 
     printf("Conexion encontrada con cliente\n"); 
