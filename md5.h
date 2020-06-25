@@ -6,7 +6,7 @@
  
 class MD5{
 public:
-    typedef unsigned int size_type; // must be 32bit
+    typedef unsigned int size_type; // Debe ser de 32bits
  
     MD5();
     MD5(const std::string& text);
@@ -17,21 +17,21 @@ public:
     friend std::ostream& operator<<(std::ostream&, MD5 md5);
 private:
     void init();
-    typedef unsigned char uint1; //  8bit
-    typedef unsigned int uint4;  // 32bit
-    enum {blocksize = 64}; // VC6 won't eat a const static int here
+    typedef unsigned char uint1; //  8bits
+    typedef unsigned int uint4;  // 32bits
+    enum {blocksize = 64};
  
     void transform(const uint1 block[blocksize]);
     static void decode(uint4 output[], const uint1 input[], size_type len);
     static void encode(uint1 output[], const uint4 input[], size_type len);
  
     bool finalized;
-    uint1 buffer[blocksize]; // bytes that didn't fit in last 64 byte chunk
-    uint4 count[2];   // 64bit counter for number of bits (lo, hi)
-    uint4 state[4];   // digest so far
-    uint1 digest[16]; // the result
+    uint1 buffer[blocksize]; // bytes que no cupieron en el ultimo bloque de 64 bytes
+    uint4 count[2];   // contador de 64 bytes para el numero de bits
+    uint4 state[4];
+    uint1 digest[16];
  
-  // low level logic operations
+  // Operaciones logicas de bajo nivel
     static inline uint4 F(uint4 x, uint4 y, uint4 z);
     static inline uint4 G(uint4 x, uint4 y, uint4 z);
     static inline uint4 H(uint4 x, uint4 y, uint4 z);
