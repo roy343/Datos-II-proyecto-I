@@ -8,6 +8,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class Visualizer; }
 QT_END_NAMESPACE
 
+class QTcpSocket;
 
 class Visualizer : public QMainWindow
 {
@@ -17,6 +18,9 @@ public:
     Visualizer(QWidget *parent = nullptr);
     ~Visualizer();
 
+
+
+
 private slots:
     void on_b1_clicked();
 
@@ -24,6 +28,7 @@ private slots:
 
 private:
     Ui::Visualizer *ui;
+    QTcpSocket *mSocket;
 
 };
 #endif // VISUALIZER_H

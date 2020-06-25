@@ -9,7 +9,7 @@
 #include <QJsonValue>
 #include <QMessageBox>
 #include <QTcpSocket>
-#include <QTcpSocket>
+
 
 Window2::Window2(QWidget *parent) :
     QDialog(parent),
@@ -17,7 +17,7 @@ Window2::Window2(QWidget *parent) :
 {
     ui->setupUi(this);
     mSocket = new QTcpSocket(this);
-
+    /*! Establece el socket para ser ejecutado en la segunda ventana */
     connect(mSocket,&QTcpSocket::readyRead, [&](){
         QTextStream T(mSocket);
         ui ->lista->addItem(T.readAll());
@@ -29,9 +29,10 @@ Window2::~Window2()
     delete ui;
 }
 
-
+/*! Funcion que lee un archivo .json y muestra su contenido cuando se llama el boton  */
 void Window2::on_b1_clicked()
 {
+    //mSocket->connectToHost(ui->id->text(),ui->puerto->value());
     QString archivo = "C:/Users/Dell/Desktop/prueba.json";
         //Variables necesarias
         QJsonArray arr;

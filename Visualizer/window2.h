@@ -19,12 +19,10 @@ class Window2 : public QDialog
 public:
     explicit Window2(QWidget *parent = nullptr);
     ~Window2();
+    QString server;
+    int port;
 
 private slots:
-    void on_b21_clicked();
-
-    void on_pushButton_clicked();
-
     void on_b1_clicked();
 
 private:

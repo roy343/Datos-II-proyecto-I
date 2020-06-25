@@ -18,10 +18,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
+    md5.cpp \
     visualizer.cpp \
     window2.cpp
 
 HEADERS += \
+    md5.h \
     visualizer.h \
     window2.h
 

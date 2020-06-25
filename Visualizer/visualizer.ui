@@ -52,7 +52,11 @@
       <widget class="QLineEdit" name="con"/>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="puerto"/>
+      <widget class="QSpinBox" name="puerto">
+       <property name="maximum">
+        <number>999999999</number>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
